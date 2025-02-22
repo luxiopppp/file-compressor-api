@@ -3,6 +3,7 @@ const cors = require('cors');
 require( 'dotenv' ).config();
 
 const upload = require('./utils/upload')
+const { compressImage } = require('./utils/compress')
 
 const app = express();
 app.use(cors());
@@ -11,9 +12,11 @@ app.get('/', (req, res) => {
   res.send('API running!')
 })
 
-app.post('/compress', upload.single('file'), (req, res) => {
+app.post('/compress', upload.single('file'), async (req, res) => {
   console.log("Archivo recibido:", req.file);
-
+  
+  await compressImage(req.file.originalname)
+  
   res.sendStatus(200);
 });
 
