@@ -12,6 +12,8 @@ async function compressImage(fileName) {
     await sharp(filePath)
       .jpeg({ quality: 60 })
       .toFile(compressedPath);
+    
+    fs.unlinkSync(filePath);
 
     console.log('Archivo comprimido!');
     return filePath
