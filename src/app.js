@@ -3,7 +3,7 @@ const cors = require('cors');
 require( 'dotenv' ).config();
 
 const upload = require('./utils/upload')
-const { compressImage } = require('./utils/compress')
+const { compressImage, compressVideo } = require('./utils/compress')
 
 const app = express();
 app.use(cors());
@@ -18,10 +18,21 @@ app.post('/compress', upload.single('file'), async (req, res) => {
   }
 
   console.log("Archivo recibido:", req.file);
+
+  const mimeType = req.file.mimetype;
+  let returnFile;
+
+  try {
+    if (mimeType.startsWith('image/')) {
+      returnFile = await compressImage(req.file.originalname)
+    } else {
+      returnFile = await compressVideo(req.file.originalname)
+    }
+  } catch (err) {
+    res.status(500).send('Error en la compresión del archivo.')
+  }
   
-  const compressedImage = await compressImage(req.file.originalname)
-  
-  res.status(200).download(compressedImage);
+  res.status(200).download(returnFile);
 });
 
 const PORT = process.env.PORT || 8080;
