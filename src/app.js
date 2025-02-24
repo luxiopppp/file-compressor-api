@@ -13,11 +13,15 @@ app.get('/', (req, res) => {
 })
 
 app.post('/compress', upload.single('file'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No se ha subido ningún archivo" });
+  }
+
   console.log("Archivo recibido:", req.file);
   
-  await compressImage(req.file.originalname)
+  const compressedImage = await compressImage(req.file.originalname)
   
-  res.sendStatus(200);
+  res.status(200).download(compressedImage);
 });
 
 const PORT = process.env.PORT || 8080;

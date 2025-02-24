@@ -5,18 +5,21 @@ const path = require('path');
 const uploadsDir = path.resolve(__dirname, '../../uploads');
 
 async function compressImage(fileName) {
-  try {
-    const filePath = path.join(uploadsDir, fileName)
-    const compressedPath = path.join(uploadsDir, 'compressed_' + path.parse(fileName).name + '.jpeg');
+  const filePath = path.join(uploadsDir, fileName);
+  const ext = path.extname(fileName);
+  const tempPath = path.join( uploadsDir, fileName.replace(ext, `.compressed${ext}` ));
+  const compressedPath = path.join(uploadsDir, path.parse(fileName).name + '.jpeg');
 
+  try {
     await sharp(filePath)
       .jpeg({ quality: 60 })
-      .toFile(compressedPath);
+      .toFile(tempPath);
     
     fs.unlinkSync(filePath);
+    fs.renameSync(tempPath, compressedPath);
 
     console.log('Archivo comprimido!');
-    return filePath
+    return compressedPath;
   } catch (err) {
     throw new Error(err.message);
   }
