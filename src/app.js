@@ -40,7 +40,7 @@ app.post('/compress', upload.array('files'), async (req, res) => {
   }
 });
 
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
+app.use('/compressed', express.static(path.join(__dirname, './static/compressed')))
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`app running on port ${PORT}`))
