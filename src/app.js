@@ -5,6 +5,7 @@ const path = require('path')
 
 const upload = require('./utils/upload')
 const { compressImage, compressVideo } = require('./utils/compress')
+const { deleteCompFiles } = require('./utils/delete')
 
 const app = express();
 app.use(cors());
@@ -33,6 +34,8 @@ app.post('/compress', upload.array('files'), async (req, res) => {
     
       return returnFile;
     }));
+
+    deleteCompFiles(compressedFiles)
 
     res.status(200).send(compressedFiles)
   } catch (err) {
