@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.send('API running!')
+  res.json('API running!')
 })
 
 app.post('/compress', upload.array('files'), async (req, res) => {

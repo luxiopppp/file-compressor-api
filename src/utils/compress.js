@@ -3,11 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
 
-const uploadsDir = path.resolve(__dirname, '../../uploads');
+const tmpDir = path.resolve(__dirname, '../../tmp');
 const staticDir = path.resolve(__dirname, '../static/compressed');
 
 async function compressImage(fileName) {
-  const filePath = path.join(uploadsDir, fileName);
+  const filePath = path.join(tmpDir, fileName);
   // const ext = path.extname(fileName);
   // const tempPath = path.join( uploadsDir, fileName.replace(ext, `.compressed${ext}` ));
   const compressedPath = path.join(staticDir, path.parse(fileName).name + '.jpeg');
@@ -30,7 +30,7 @@ async function compressImage(fileName) {
 
 function compressVideo(fileName) {
   return new Promise((resolve, reject) => {
-    const filePath = path.join(uploadsDir, fileName);
+    const filePath = path.join(tmpDir, fileName);
     // const ext = path.extname(fileName);
     // const tempPath = path.join( uploadsDir, fileName.replace(ext, `.compressed${ext}` ));
     const compressedPath = path.join(staticDir, path.parse(fileName).name + '.mp4');
