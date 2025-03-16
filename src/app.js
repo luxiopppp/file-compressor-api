@@ -4,7 +4,7 @@ require( 'dotenv' ).config();
 const path = require('path')
 
 const upload = require('./utils/upload')
-const { compressImage, compressVideo } = require('./utils/compress')
+const { compressImage, compressVideo, processHEIC } = require('./utils/compress')
 const { deleteCompFiles } = require('./utils/delete')
 
 const app = express();
@@ -28,6 +28,7 @@ app.post('/compress', upload.array('files'), async (req, res) => {
 
       if (mimeType.startsWith('image/')) {
         returnFile = await compressImage(file.originalname);
+        // returnFile = await processHEIC(file.originalname);
       } else if (mimeType.startsWith('video/')) {
         returnFile = await compressVideo(file.originalname);
       }
